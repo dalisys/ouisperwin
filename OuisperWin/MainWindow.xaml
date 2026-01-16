@@ -5,9 +5,123 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tb="using:H.NotifyIcon"
+    xmlns:local="using:OuisperWin"
+    xmlns:core="using:OuisperWin.Core"
     mc:Ignorable="d">
 
+    <Window.Resources>
+        <core:BoolToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+
     <Grid>
+        <!-- Background -->
+        <Grid.Background>
+            <RadialGradientBrush Center="0.2,0.2" GradientOrigin="0.2,0.2" RadiusX="1.5" RadiusY="1.5">
+                <GradientStop Color="#E61C1F24" Offset="0"/>
+                <GradientStop Color="#FF0F1214" Offset="1"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <StackPanel Grid.Column="0" Spacing="16" Margin="0,32,0,0"> <!-- Added top margin for TitleBar space -->
+                <TextBlock Text="Ouisper" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource MistBrush}" FontFamily="Georgia"/>
+
+                <StackPanel Spacing="4" Padding="12" CornerRadius="18" BorderThickness="1" BorderBrush="#14FFFFFF">
+                    <StackPanel.Background>
+                        <SolidColorBrush Color="{StaticResource SlateColor}" Opacity="0.85"/>
+                    </StackPanel.Background>
+                    
+                    <Button x:Name="BtnGeneral" Click="Nav_Click" Tag="General" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="Transparent" BorderThickness="0">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE713;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource MistBrush}"/>
+                            <TextBlock Text="General" Foreground="{StaticResource MistBrush}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="BtnProviders" Click="Nav_Click" Tag="Providers" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="Transparent" BorderThickness="0">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE968;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource MistBrush}"/>
+                            <TextBlock Text="Providers" Foreground="{StaticResource MistBrush}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <TextBlock Text="System dictation control deck." FontSize="11" Foreground="{StaticResource MistBrush}" Opacity="0.6" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,20,0,0"/>
+            </StackPanel>
+
+            <!-- Content Area -->
+            <Grid Grid.Column="1" Margin="18,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock x:Name="PageTitle" Text="General Settings" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource MistBrush}" Margin="0,0,0,16"/>
+
+                <Border Grid.Row="1" Style="{StaticResource GlassCardStyle}" Background="#CC1C1F24"> <!-- Slightly more opaque for content -->
+                    <ScrollViewer>
+                        <StackPanel Spacing="20">
+                            <!-- GENERAL TAB CONTENT -->
+                            <StackPanel x:Name="GeneralTab" Spacing="14">
+                                <!-- Injection Status -->
+                                <StackPanel Style="{StaticResource GlassCardStyle}">
+                                    <TextBlock Text="Status" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource MistBrush}"/>
+                                    <TextBlock Text="Ready." FontSize="11" Foreground="{StaticResource MistBrush}" Opacity="0.7" Margin="0,4,0,0"/>
+                                </StackPanel>
+
+                                <TextBlock Text="Core" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource MistBrush}"/>
+
+                                <StackPanel Style="{StaticResource GlassCardStyle}" Spacing="12">
+                                    <Grid>
+                                        <TextBlock Text="Activation Key" Foreground="{StaticResource MistBrush}" Opacity="0.8" VerticalAlignment="Center"/>
+                                        <ComboBox x:Name="HotkeyCombo" HorizontalAlignment="Right" Width="160" SelectionChanged="Hotkey_Changed">
+                                            <ComboBoxItem Content="Insert" Tag="Insert"/>
+                                            <ComboBoxItem Content="Right Ctrl" Tag="Control"/>
+                                            <ComboBoxItem Content="Right Alt" Tag="RightOption"/>
+                                        </ComboBox>
+                                    </Grid>
+                                    
+                                    <ToggleSwitch Header="Use LLM Text Correction" IsOn="True" Foreground="{StaticResource MistBrush}"/>
+                                    <TextBlock Text="Disable to reduce latency; raw transcription is pasted instantly." FontSize="11" Foreground="{StaticResource MistBrush}" Opacity="0.7"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- PROVIDERS TAB CONTENT -->
+                            <StackPanel x:Name="ProvidersTab" Spacing="14" Visibility="Collapsed">
+                                <TextBlock Text="Provider" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource MistBrush}"/>
+                                
+                                <StackPanel Style="{StaticResource GlassCardStyle}">
+                                    <ComboBox x:Name="ProviderCombo" Width="200" SelectionChanged="Provider_Changed">
+                                        <ComboBoxItem Content="Google Gemini" Tag="Gemini" IsSelected="True"/>
+                                        <ComboBoxItem Content="OpenAI Whisper" Tag="Whisper"/>
+                                        <ComboBoxItem Content="Mistral Voxtral" Tag="Voxtral"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <TextBlock Text="Credentials &amp; Models" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource MistBrush}"/>
+                                
+                                <StackPanel Style="{StaticResource GlassCardStyle}" Spacing="10">
+                                    <PasswordBox x:Name="ApiKeyBox" Header="API Key" PasswordChanged="ApiKey_Changed"/>
+                                    <TextBlock x:Name="ApiKeyStoredText" Text="Stored: No" FontSize="11" Foreground="{StaticResource MistBrush}" Opacity="0.7"/>
+                                    
+                                    <TextBox Header="Transcription Model (STT)" Text="gemini-1.5-flash" x:Name="SttModelBox"/>
+                                    <TextBox Header="Correction Model (LLM)" Text="gemini-1.5-flash" x:Name="LlmModelBox"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- Tray Icon -->
         <tb:TaskbarIcon
             x:Name="TrayIcon"
             ToolTipText="Ouisper"
@@ -15,16 +129,11 @@
             MenuActivation="LeftOrRightClick">
             <tb:TaskbarIcon.ContextFlyout>
                 <MenuFlyout>
-                    <MenuFlyoutItem Text="Settings" Click="Settings_Click" />
+                    <MenuFlyoutItem Text="Show Settings" Click="Settings_Click" />
                     <MenuFlyoutSeparator />
                     <MenuFlyoutItem Text="Exit" Click="Exit_Click" />
                 </MenuFlyout>
             </tb:TaskbarIcon.ContextFlyout>
         </tb:TaskbarIcon>
-        
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
-            <TextBlock Text="Ouisper is running in the background." HorizontalAlignment="Center"/>
-            <Button Content="Open Settings" Click="Settings_Click" HorizontalAlignment="Center"/>
-        </StackPanel>
     </Grid>
 </Window>

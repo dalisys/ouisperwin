@@ -1,0 +1,56 @@
+<Window
+    x:Class="OuisperWin.RecordingOverlay"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="RootGrid" Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,50,0,0">
+        <Border x:Name="CardBorder"
+                Background="{StaticResource CardGradientBrush}"
+                CornerRadius="50"
+                BorderBrush="#14FFFFFF"
+                BorderThickness="1"
+                Padding="18,10">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <!-- Recording State -->
+                <StackPanel x:Name="RecordingPanel" Orientation="Horizontal" Spacing="12" Visibility="Collapsed">
+                    <Grid>
+                        <Ellipse Width="10" Height="10" Fill="{StaticResource NeonBrush}"/>
+                        <Ellipse Width="16" Height="16" Stroke="{StaticResource NeonBrush}" StrokeThickness="2" Opacity="0.4">
+                            <Ellipse.Triggers>
+                                <!-- Basic Pulse Animation would go here or in code-behind -->
+                            </Ellipse.Triggers>
+                        </Ellipse>
+                    </Grid>
+                    <TextBlock Text="Listening" Foreground="{StaticResource MistBrush}" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Processing State -->
+                <StackPanel x:Name="ProcessingPanel" Orientation="Horizontal" Spacing="12" Visibility="Collapsed">
+                    <ProgressRing Width="16" Height="16" Foreground="{StaticResource CyanBrush}"/>
+                    <TextBlock Text="Processing" Foreground="{StaticResource MistBrush}" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                </StackPanel>
+                
+                 <!-- Refining State -->
+                <StackPanel x:Name="RefiningPanel" Orientation="Horizontal" Spacing="12" Visibility="Collapsed">
+                    <FontIcon Glyph="&#xE724;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource VioletBrush}"/> <!-- Sparkles -->
+                    <TextBlock Text="Refining" Foreground="{StaticResource MistBrush}" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Success State -->
+                <StackPanel x:Name="SuccessPanel" Orientation="Horizontal" Spacing="12" Visibility="Collapsed">
+                    <FontIcon Glyph="&#xE73E;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource NeonBrush}"/> <!-- Check -->
+                    <TextBlock Text="Done" Foreground="{StaticResource MistBrush}" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Error State -->
+                <StackPanel x:Name="ErrorPanel" Orientation="Horizontal" Spacing="12" Visibility="Collapsed">
+                    <FontIcon Glyph="&#xE783;" FontFamily="Segoe MDL2 Assets" Foreground="{StaticResource EmberBrush}"/> <!-- Warning -->
+                    <TextBlock Text="Error" Foreground="{StaticResource MistBrush}" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
