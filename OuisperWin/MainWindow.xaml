@@ -1,0 +1,30 @@
+<Window
+    x:Class="OuisperWin.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tb="using:H.NotifyIcon"
+    mc:Ignorable="d">
+
+    <Grid>
+        <tb:TaskbarIcon
+            x:Name="TrayIcon"
+            ToolTipText="Ouisper"
+            IconSource="/Assets/Square44x44Logo.targetsize-24_altform-unplated.png"
+            MenuActivation="LeftOrRightClick">
+            <tb:TaskbarIcon.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Text="Settings" Click="Settings_Click" />
+                    <MenuFlyoutSeparator />
+                    <MenuFlyoutItem Text="Exit" Click="Exit_Click" />
+                </MenuFlyout>
+            </tb:TaskbarIcon.ContextFlyout>
+        </tb:TaskbarIcon>
+        
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
+            <TextBlock Text="Ouisper is running in the background." HorizontalAlignment="Center"/>
+            <Button Content="Open Settings" Click="Settings_Click" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>
